@@ -640,6 +640,7 @@ LABELS = {
 		'Duration': '',
 		'SpamCheck': '',
 		'Refresh': '',
+		'Spam': '',
 		'Delete': '',
 		'Delete All...': '',
 		'Name': '',
@@ -689,6 +690,8 @@ LABELS = {
 		'Wifi Scheduler OFF': '',
 		'Show Global Status...': '',
 		'Wifi': '',
+		'Backup and Restore...': '',
+		'Miscellaneous': '',
 		'Reboot Livebox...': '',
 		'Reboot History...': '',
 		'Reboots': '',
@@ -754,6 +757,20 @@ LABELS = {
 		'Error': '',
 		'Inactive': '',
 		'Not signed': ''
+	},
+
+	# Actions - Backup & Restore
+	'backrest': {
+		'Auto backup enabled:': '',
+		'Status:': '',
+		'Last Backup:': '',
+		'Refresh': '',
+		'Enable Auto Backup': '',
+		'Disable Auto Backup': '',
+		'Force Backup': '',
+		'Force Restore': '',
+		'OK': '',
+		'Backup and Restore Setup': ''
 	},
 
 	# Actions - Firewall level
@@ -954,6 +971,7 @@ LABELS = {
 		'Realtime wifi device statistics': '',
 		'Prevent sleep mode': '',
 		'Use native graphical interface style': '',
+		'Save passwords': '',
 		'Autorize the phone number to be checked with callfilter.app': '',
 		'Preferences': '',
 		'OK': '',
@@ -975,9 +993,10 @@ LABELS = {
 	'signin': {
 		'User': '',
 		'Password': '',
+		'Save passwords' : '',
 		'OK': '',
 		'Cancel': '',
-		'Wrong password': ''
+		'Enter password': ''
 	},
 
 	# Config - email
@@ -1410,6 +1429,7 @@ TOOLTIPS = {
 		'colist_Work': '',
 		'colist_Ring': '',
 		'refreshCall': '',
+		'spamCall': '',
 		'deleteCall': '',
 		'deleteAllCalls': '',
 		'refreshContact': '',
@@ -1451,6 +1471,8 @@ TOOLTIPS = {
 		'schedulerOff': '',
 		'wifiGlobalStatus': '',
 		'wifiGroup': '',
+		'backupRestore': '',
+		'miscGroup': '',
 		'rebootLivebox': '',
 		'rebootHistory': '',
 		'rebootGroup': '',
@@ -1486,6 +1508,22 @@ TOOLTIPS = {
 
 	# Actions - Wifi global status
 	'wglobal': {
+		'ok': ''
+	},
+
+	# Actions - Backup & Restore
+	'backrest': {
+		'autoBackEnabledLabel': '',
+		'autoBackEnabled': '',
+		'statusLabel': '',
+		'status': '',
+		'lastBackupLabel': '',
+		'lastBackup': '',
+		'refresh': '',
+		'enaAutoBack': '',
+		'disAutoBack': '',
+		'forceBackup': '',
+		'forceRestore': '',
 		'ok': ''
 	},
 
@@ -1620,6 +1658,7 @@ TOOLTIPS = {
 		'realtimeWifiStats': '',
 		'preventSleepMode': '',
 		'nativeUIStyle': '',
+		'savePasswords': '',
 		'checkPhoneNumber': '',
 		'prefsGroup': '',
 		'ok': '',
@@ -1643,6 +1682,7 @@ TOOLTIPS = {
 		'userEdit': '',
 		'passwordLabel': '',
 		'passwordEdit': '',
+		'savePasswords': '',
 		'ok': '',
 		'cancel': ''
 	},
@@ -1805,6 +1845,12 @@ MESSAGES = {
 		'schedOnErr':  '',
 		'schedOff':  '',
 		'schedOffErr':  '',
+		'backRestSvcErr' : '',
+		'backEnableSvcErr' : '',
+		'backDisableSvcErr' : '',
+		'backupSvcErr' : '',
+		'restoreSvcOk' : '',
+		'restoreSvcErr' : '',
 		'lbReboot':  '',
 		'appQuit':  '',
 		'dynDnsLoadErr':  '',
@@ -1832,7 +1878,7 @@ MESSAGES = {
 		'forceResign':  ''
 	},
 
-	# # Config
+	# Config
 	'prefs': {
 		'wrongFile':  '',
 		'configVersion':  '',

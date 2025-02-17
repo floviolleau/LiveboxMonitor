@@ -1,6 +1,7 @@
 ### Livebox Monitor phone tab module ###
 
 import os
+import webbrowser
 import requests
 import time
 from bs4 import BeautifulSoup
@@ -47,6 +48,8 @@ class ContactCol(IntEnum):
 	Ring = 5
 	Count = 6
 
+# Check spam URL
+CHECK_SPAM_URL = 'https://www.numeroinconnu.fr/numero/{}'
 
 # ################################ LmPhone class ################################
 class LmPhone:
@@ -96,6 +99,9 @@ class LmPhone:
 		aRefreshCallButton = QtWidgets.QPushButton(lx('Refresh'), objectName = 'refreshCall')
 		aRefreshCallButton.clicked.connect(self.refreshCallButtonClick)
 		aCallButtonsBox.addWidget(aRefreshCallButton)
+		aSpamCallButton = QtWidgets.QPushButton(lx('Spam'), objectName = 'spamCall')
+		aSpamCallButton.clicked.connect(self.spamCallButtonClick)
+		aCallButtonsBox.addWidget(aSpamCallButton)
 		aDeleteCallButton = QtWidgets.QPushButton(lx('Delete'), objectName = 'deleteCall')
 		aDeleteCallButton.clicked.connect(self.deleteCallButtonClick)
 		aCallButtonsBox.addWidget(aDeleteCallButton)
@@ -244,6 +250,16 @@ class LmPhone:
 		self._callList.clearContents()
 		self._callList.setRowCount(0)
 		self.loadCallList()
+
+
+	### Click on spam call button
+	def spamCallButtonClick(self):
+		aCurrentSelection = self._callList.currentRow()
+		if aCurrentSelection >= 0:
+			aPhoneNb = self._callList.item(aCurrentSelection, CallCol.Number).text()
+			webbrowser.open_new_tab(CHECK_SPAM_URL.format(aPhoneNb))
+		else:
+			self.displayError(mx('Please select a phone call.', 'callSelect'))
 
 
 	### Click on delete call button

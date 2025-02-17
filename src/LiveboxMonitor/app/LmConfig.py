@@ -68,6 +68,7 @@ DCFG_EMAIL = None
 DCFG_CSV_DELIMITER = ';'
 DCFG_TIMEOUT_MARGIN = 0
 DCFG_PREVENT_SLEEP = True
+DCFG_SAVE_PASSWORDS = True
 
 # Static config
 GIT_REPO = 'p-dor/LiveboxMonitor'
@@ -535,6 +536,7 @@ class LmConf:
 	CsvDelimiter = DCFG_CSV_DELIMITER
 	TimeoutMargin = DCFG_TIMEOUT_MARGIN
 	PreventSleep = DCFG_PREVENT_SLEEP
+	SavePasswords = DCFG_SAVE_PASSWORDS
 
 
 	### Load configuration, returns False the program aborts starting
@@ -675,6 +677,9 @@ class LmConf:
 			p = aConfig.get('Prevent Sleep')
 			if p is not None:
 				LmConf.PreventSleep = bool(p)
+			p = aConfig.get('Save Passwords')
+			if p is not None:
+				LmConf.SavePasswords = bool(p)
 
 		if aConfigFile is not None:
 			aConfigFile.close()
@@ -969,7 +974,10 @@ class LmConf:
 					LmConf.CurrProfile['Default'] = True
 				LmConf.CurrProfile['Livebox URL'] = LmConf.LiveboxURL
 				LmConf.CurrProfile['Livebox User'] = LmConf.LiveboxUser
-				LmConf.CurrProfile['Livebox Password'] = Fernet(LmConf.Secret.encode('utf-8')).encrypt(LmConf.LiveboxPassword.encode('utf-8')).decode('utf-8')
+				if LmConf.SavePasswords:
+					LmConf.CurrProfile['Livebox Password'] = Fernet(LmConf.Secret.encode('utf-8')).encrypt(LmConf.LiveboxPassword.encode('utf-8')).decode('utf-8')
+				else:
+					LmConf.CurrProfile['Livebox Password'] = None
 				LmConf.CurrProfile['Livebox MacAddr'] = LmConf.LiveboxMAC
 				LmConf.CurrProfile['Filter Devices'] = LmConf.FilterDevices
 				LmConf.CurrProfile['MacAddr Table File'] = LmConf.MacAddrTableFile
@@ -1001,6 +1009,7 @@ class LmConf:
 				aConfig['CSV Delimiter'] = LmConf.CsvDelimiter
 				aConfig['Timeout Margin'] = LmConf.TimeoutMargin
 				aConfig['Prevent Sleep'] = LmConf.PreventSleep
+				aConfig['Save Passwords'] = LmConf.SavePasswords
 				json.dump(aConfig, aConfigFile, indent = 4)
 		except BaseException as e:
 			LmTools.Error('Cannot save configuration file. Error: {}'.format(e))
@@ -1083,7 +1092,10 @@ class LmConf:
 			aRepeaterConf['User'] = LmConf.LiveboxUser
 
 		# Setup password
-		aRepeaterConf['Password'] = Fernet(LmConf.Secret.encode('utf-8')).encrypt(iPassword.encode('utf-8')).decode('utf-8')
+		if LmConf.SavePasswords:
+			aRepeaterConf['Password'] = Fernet(LmConf.Secret.encode('utf-8')).encrypt(iPassword.encode('utf-8')).decode('utf-8')
+		else:
+			aRepeaterConf['Password'] = None
 
 		# Save to config file
 		LmConf.save()
@@ -1395,7 +1407,7 @@ class LiveboxCnxDialog(QtWidgets.QDialog):
 
 # ################################ Livebox signin dialog ################################
 class LiveboxSigninDialog(QtWidgets.QDialog):
-	def __init__(self, iUser, iPassword, iParent = None):
+	def __init__(self, iUser, iPassword, iSavePasswords, iParent = None):
 		super(LiveboxSigninDialog, self).__init__(iParent)
 		self.resize(450, 130)
 
@@ -1415,16 +1427,21 @@ class LiveboxSigninDialog(QtWidgets.QDialog):
 		aEditGrid.addWidget(aPasswordLabel, 1, 0)
 		aEditGrid.addWidget(self._passwordEdit, 1, 1)
 
+		self._savePasswords = QtWidgets.QCheckBox(lsx('Save passwords'), objectName = 'savePasswords')
 		self._okButton = QtWidgets.QPushButton(lsx('OK'), objectName = 'ok')
 		self._okButton.clicked.connect(self.accept)
 		self._okButton.setDefault(True)
 		aCancelButton = QtWidgets.QPushButton(lsx('Cancel'), objectName = 'cancel')
 		aCancelButton.clicked.connect(self.reject)
 		aButtonBar = QtWidgets.QHBoxLayout()
-		aButtonBar.setAlignment(QtCore.Qt.AlignmentFlag.AlignRight)
 		aButtonBar.setSpacing(10)
-		aButtonBar.addWidget(self._okButton, 0, QtCore.Qt.AlignmentFlag.AlignRight)
-		aButtonBar.addWidget(aCancelButton, 0, QtCore.Qt.AlignmentFlag.AlignRight)
+		aButtonBar.addWidget(self._savePasswords, 0, QtCore.Qt.AlignmentFlag.AlignLeft)
+		aOkButtonBar = QtWidgets.QHBoxLayout()
+		aOkButtonBar.setAlignment(QtCore.Qt.AlignmentFlag.AlignRight)
+		aOkButtonBar.setSpacing(10)
+		aOkButtonBar.addWidget(self._okButton, 0, QtCore.Qt.AlignmentFlag.AlignRight)
+		aOkButtonBar.addWidget(aCancelButton, 0, QtCore.Qt.AlignmentFlag.AlignRight)
+		aButtonBar.addLayout(aOkButtonBar)
 
 		aVBox = QtWidgets.QVBoxLayout(self)
 		aVBox.addLayout(aEditGrid, 0)
@@ -1434,13 +1451,17 @@ class LiveboxSigninDialog(QtWidgets.QDialog):
 
 		SetToolTips(self, 'signin')
 
-		aTitle = lsx('Wrong password')
+		aTitle = lsx('Enter password')
 		if len(LmConf.Profiles) > 1:
 			aTitle += ' [' + LmConf.CurrProfile['Name'] + ']'
 		self.setWindowTitle(aTitle)
 
 		self._userEdit.setText(iUser)
 		self._passwordEdit.setText(iPassword)
+		if iSavePasswords:
+			self._savePasswords.setCheckState(QtCore.Qt.CheckState.Checked)
+		else:
+			self._savePasswords.setCheckState(QtCore.Qt.CheckState.Unchecked)
 
 		self.setModal(True)
 		self.show()
@@ -1456,6 +1477,10 @@ class LiveboxSigninDialog(QtWidgets.QDialog):
 
 	def getPassword(self):
 		return self._passwordEdit.text()
+
+
+	def getSavePasswords(self):
+		return self._savePasswords.isChecked()
 
 
 
@@ -1702,6 +1727,7 @@ class PrefsDialog(QtWidgets.QDialog):
 		self._realtimeWifiStats = QtWidgets.QCheckBox(lx('Realtime wifi device statistics'), objectName = 'realtimeWifiStats')
 		self._preventSleep = QtWidgets.QCheckBox(lx('Prevent sleep mode'), objectName = 'preventSleepMode')
 		self._nativeUIStyle = QtWidgets.QCheckBox(lx('Use native graphical interface style'), objectName = 'nativeUIStyle')
+		self._savePasswords = QtWidgets.QCheckBox(lx('Save passwords'), objectName = 'savePasswords')
 		self._checkPhoneNumber = QtWidgets.QCheckBox(lx('Autorize the phone number to be checked with callfilter.app'), objectName = 'checkPhoneNumber')
 
 		aPrefsEditGrid = QtWidgets.QGridLayout()
@@ -1732,6 +1758,7 @@ class PrefsDialog(QtWidgets.QDialog):
 		aPrefsEditGrid.addWidget(self._realtimeWifiStats, 6, 0, 1, 2)
 		aPrefsEditGrid.addWidget(self._preventSleep, 6, 2, 1, 2)
 		aPrefsEditGrid.addWidget(self._nativeUIStyle, 7, 0, 1, 2)
+		aPrefsEditGrid.addWidget(self._savePasswords, 7, 2, 1, 2)
 		aPrefsEditGrid.addWidget(self._checkPhoneNumber, 8, 0, 1, 2)
 
 		aPrefsGroupBox = QtWidgets.QGroupBox(lx('Preferences'), objectName = 'prefsGroup')
@@ -1806,6 +1833,10 @@ class PrefsDialog(QtWidgets.QDialog):
 			self._nativeUIStyle.setCheckState(QtCore.Qt.CheckState.Checked)
 		else:
 			self._nativeUIStyle.setCheckState(QtCore.Qt.CheckState.Unchecked)
+		if LmConf.SavePasswords:
+			self._savePasswords.setCheckState(QtCore.Qt.CheckState.Checked)
+		else:
+			self._savePasswords.setCheckState(QtCore.Qt.CheckState.Unchecked)
 		if LmConf.CheckPhoneNumber:
 			self._checkPhoneNumber.setCheckState(QtCore.Qt.CheckState.Checked)
 		else:
@@ -1843,6 +1874,7 @@ class PrefsDialog(QtWidgets.QDialog):
 		LmConf.RealtimeWifiStats_save = self._realtimeWifiStats.isChecked()
 		LmConf.PreventSleep = self._preventSleep.isChecked()
 		LmConf.NativeUIStyle = self._nativeUIStyle.isChecked()
+		LmConf.SavePasswords = self._savePasswords.isChecked()
 		LmConf.CheckPhoneNumber = self._checkPhoneNumber.isChecked()
 
 

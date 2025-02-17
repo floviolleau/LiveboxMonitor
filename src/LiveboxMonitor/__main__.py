@@ -280,7 +280,7 @@ class LiveboxMonitorUI(QtWidgets.QMainWindow, LmDeviceListTab.LmDeviceList,
 			self.startTask(lx('Signing in...'))
 			self._session = LmSession(LmConf.LiveboxURL, 'LiveboxMonitor_' + LmConf.CurrProfile['Name'])
 			try:
-				r = self._session.signin(LmConf.LiveboxUser, LmConf.LiveboxPassword)
+				r = self._session.signin(LmConf.LiveboxUser, LmConf.LiveboxPassword, not LmConf.SavePasswords)
 			except BaseException as e:
 				LmTools.Error('Error: {}'.format(e))
 				r = -1
@@ -303,11 +303,12 @@ class LiveboxMonitorUI(QtWidgets.QMainWindow, LmDeviceListTab.LmDeviceList,
 					self.displayError(mx('Cannot connect to the Livebox.', 'cnx'))
 					return False
 
-			aDialog = LiveboxSigninDialog(LmConf.LiveboxUser, LmConf.LiveboxPassword, self)
+			aDialog = LiveboxSigninDialog(LmConf.LiveboxUser, LmConf.LiveboxPassword, LmConf.SavePasswords, self)
 			if aDialog.exec():
 				# Remove unwanted characters (can be set via Paste action)
 				aUser = re.sub('[\n\t]', '', aDialog.getUser())
 				aPassword = re.sub('[\n\t]', '', aDialog.getPassword())
+				LmConf.SavePasswords = aDialog.getSavePasswords()
 				LmConf.setLiveboxUserPassword(aUser, aPassword)
 				self.show()
 			else:
@@ -360,36 +361,38 @@ class LiveboxMonitorUI(QtWidgets.QMainWindow, LmDeviceListTab.LmDeviceList,
 		SetLiveboxModel(self._liveboxModel)
 
 
-	### Adjust configuration to Livebox model
+	### Determine link type and if fiber or not
 	def determineFiberLink(self):
+		# Determine link type
+		d = None
+		try:
+			q = self._session.request('NMC', 'getWANStatus')
+		except BaseException as e:
+			LmTools.Error('Error: {}'.format(e))
+			q = None
+		if q is not None:
+			d = q.get('status')
+		if not d:
+			LmTools.Error('NMC:getWANStatus query error')
+		if q is not None:
+			d = q.get('data')
+		else:
+			d = None
+		if d is None:
+			LmTools.Error('NMC:getWANStatus data error')
+			self._linkType = 'UNKNOWN'
+		else:
+			self._linkType = d.get('LinkType', 'UNKNOWN').upper()
+
+		# Determine fiber link
 		if self._liveboxModel >= 5:
 			self._fiberLink = True
 		elif self._liveboxModel <= 3:
 			self._fiberLink = False
 		else:
-			# Check WAN Status for Livebox 4
-			self._fiberLink = False
-			d = None
-			try:
-				q = self._session.request('NMC', 'getWANStatus')
-			except BaseException as e:
-				LmTools.Error('Error: {}'.format(e))
-				q = None
-			if q is not None:
-				d = q.get('status')
-			if (d is None) or (not d):
-				LmTools.Error('NMC:getWANStatus query error')
-			if q is not None:
-				d = q.get('data')
-			else:
-				d = None
-			if d is None:
-				LmTools.Error('NMC:getWANStatus data error')
-			else:
-				aLinkType = d.get('LinkType')
-				if (aLinkType is not None) and (aLinkType.upper() == 'SFP'):
-					self._fiberLink = True
-					
+			# Check link type for Livebox 4
+			self._fiberLink = (self._linkType == 'SFP')
+
 
 	### Exit with escape
 	def keyPressEvent(self, e):

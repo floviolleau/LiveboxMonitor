@@ -593,6 +593,8 @@ LABELS = {
 		'Wifi Scheduler ON': 'Planificateur Wifi ON',
 		'Wifi Scheduler OFF': 'Planificateur Wifi OFF',
 		'Show Global Status...': 'État Global Wifi...',
+		'Backup and Restore...': 'Sauvegarde et Restauration...',
+		'Miscellaneous': 'Divers',
 		'Reboot Livebox...': 'Redémarrer la Livebox...',
 		'Reboot History...': 'Historique Redémarrages...',
 		'Reboots': 'Redémarrages',
@@ -651,6 +653,19 @@ LABELS = {
 		'Error': 'Erreur',
 		'Inactive': 'Inactif',
 		'Not signed': 'Non authentifié'
+	},
+
+	# Actions - Backup & Restore
+	'backrest': {
+		'Auto backup enabled:': 'Sauvegarde automatique activée :',
+		'Status:': 'Statut :',
+		'Last Backup:': 'Dernière Sauvegarde :',
+		'Refresh': 'Rafraîchir',
+		'Enable Auto Backup': 'Activer Sauvegarde Automatique',
+		'Disable Auto Backup': 'Désactiver Sauvegarde Automatique',
+		'Force Backup': 'Forcer Sauvegarde',
+		'Force Restore': 'Forcer Restauration',
+		'Backup and Restore Setup': 'Réglages Sauvegarde et Restauration'
 	},
 
 	# Actions - Firewall level
@@ -828,6 +843,7 @@ LABELS = {
 		'Realtime wifi device statistics': 'Statistiques temps réel des appareils wifi',
 		'Prevent sleep mode': 'Empêcher la mise en veille',
 		'Use native graphical interface style': 'Utiliser le style d\'interface graphique natif',
+		'Save passwords': 'Sauver les mots de passe',
 		'Autorize the phone number to be checked with callfilter.app': 'Autoriser à vérifier le numéro avec callfilter.app',
 		'Preferences': 'Préférences',
 		'Cancel': 'Annuler'
@@ -847,8 +863,9 @@ LABELS = {
 	'signin': {
 		'User': 'Utilisateur',
 		'Password': 'Mot de passe',
+		'Save passwords' : 'Sauver les mots de passe',
 		'Cancel': 'Annuler',
-		'Wrong password': 'Mauvais mot de passe'
+		'Enter password': 'Entrez le mot de passe'
 	},
 
 	# Config - email
@@ -1351,6 +1368,8 @@ TOOLTIPS = {
 		'colist_Work': 'Numéro de téléphone professionnel.',
 		'colist_Ring': 'Type de sonnerie sélectionné parmi les 7 supportés par la Livebox.',
 		'refreshCall': 'Rafraîchit la liste des appels.',
+		'spamCall': 'Ouvre un site web sur votre navigateur permettant de vérifier l\'origine\n'
+					'de l\'appel sélectionné.',
 		'deleteCall': 'Supprime l\'appel sélectionné.',
 		'deleteAllCalls': 'Supprime tous les appels.',
 		'refreshContact': 'Rafraîchit la liste des contacts.',
@@ -1385,6 +1404,8 @@ TOOLTIPS = {
 		'schedulerOff': 'Permet de désactiver le planificateur Wifi de la Livebox.',
 		'wifiGlobalStatus': 'Permet d\'afficher l\'état global du Wifi, en incluant l\'état Wifi de tous\n'
 							'les répéteurs Wifi Orange potentiellement connectés.',
+		'backupRestore': 'Permet de régler la sauvegarde automatique de la configuration de la Livebox,\n'
+						 'de déclencher une sauvegarde ou de demander une restauration de la configuration.',
 		'rebootLivebox': 'Permet de forcer un redémarrage de la Livebox.',
 		'rebootHistory': 'Permet d\'afficher l\'historique des derniers redémarrages.\n'
 						 'Utile pour détecter les redémarrages forcés par Orange pour mettre à jour le logiciel de la Livebox.',
@@ -1426,6 +1447,19 @@ TOOLTIPS = {
 
 	# Actions - Wifi global status
 	'wglobal': {},
+
+	# Actions - Backup & Restore
+	'backrest': {
+		'autoBackEnabled': 'Indique si la sauvegarde automatique est activée ou non.',
+		'status': 'Indique le statut actuel de la sauvegarde.',
+		'lastBackup': 'Date et heure de la dernière sauvegarde.',
+		'refresh': 'Permet de rafraîchir les informations ci-dessus.',
+		'enaAutoBack': 'Permet d\'activer la sauvegarde automatique de la configuration de la Livebox.',
+		'disAutoBack': 'Permet de désactiver la sauvegarde automatique de la configuration de la Livebox.',
+		'forceBackup': 'Permet de forcer une sauvegarde de la configuration de la Livebox.',
+		'forceRestore': 'Permet de forcer une restauration de la configuration de la Livebox à partir\n'
+						'de la dernière sauvegarde. Un redémarrage de la Livebox est déclenché.'
+	},
 
 	# Actions - Firewall level
 	'fwlevel': {
@@ -1576,6 +1610,9 @@ TOOLTIPS = {
 						 'Cette option permet sur les plateformes Windows et MacOS d\'utiliser\n'
 						 'un style graphique plus natif.\n'
 						 'Elle n\'a aucun effet sur les plateformes Linux.',
+		'savePasswords': 'Permet de sauver les mots de passe dans la configuration (encryptés) pour éviter\n'
+						 'd\'avoir à les retaper à chaque lancement.'
+						 'Elle n\'a aucun effet sur les plateformes Linux.',
 		'checkPhoneNumber': 'Autorise a vérifier les numéros qui ne font pas partie du carnet d\'adresse\n'
 						 'a être vérifés par callfilter.app',
 	},
@@ -1595,7 +1632,9 @@ TOOLTIPS = {
 		'passwordEdit': 'Le mot de passe est soit ce que vous avez indiqué vous-même soit le mot de passe d\'origine qui\n'
 						'se trouve sur la carte Wifi. Il est constitué des 8 premiers caractères (sans espace) de la clé de\n'
 						'sécurité visible sur l\'étiquette située sous votre Livebox.\n'
-						'Lisez la documentation pour plus de détails.'
+						'Lisez la documentation pour plus de détails.',
+		'savePasswords': 'Permet de sauver les mots de passe dans la configuration (encryptés) pour éviter\n'
+						 'd\'avoir à les retaper à chaque lancement.'
 	},
 
 	# Config - email
@@ -1754,6 +1793,12 @@ MESSAGES = {
 		'schedOnErr': 'Impossible d\'activer le planificateur.',
 		'schedOff': 'Planificateur désactivé.',
 		'schedOffErr': 'Impossible de désactiver le planificateur.',
+		'backRestSvcErr' : 'Impossible de charger le statut de la sauvegarde et de la restauration.',
+		'backEnableSvcErr' : 'Impossible d\'activer la sauvegarde automatique.',
+		'backDisableSvcErr' : 'Impossible de désactiver la sauvegarde automatique.',
+		'backupSvcErr' : 'La demande de sauvegarde a échoué.',
+		'restoreSvcOk' : 'La restauration a été demandée. La Livebox va redémarrer.',
+		'restoreSvcErr' : 'La demande de restauration a échoué.',
 		'lbReboot': 'Etes-vous sûr de vouloir redémarrer la Livebox ?',
 		'appQuit': 'L\'application va maintenant se fermer.',
 		'dynDnsLoadErr': 'Impossible de charger la liste des domaines DynDNS.',

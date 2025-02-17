@@ -52,17 +52,17 @@ Les autres dépendances sont `requests`, `cryptography` et `python-dateutil`.
 
 **Note** : Le module `LmSession` est une adaptation du package [sysbus](https://github.com/rene-d/sysbus) pour les Livebox 5,6 & 7. Le support des événements a aussi été rajouté.
 
-### Téléchargement - version 1.4 (24/04/2024)
+### Téléchargement - version 1.5 (26/01/2025)
 
 Des programmes autonomes construits avec [PyInstaller](https://pyinstaller.org) sont disponibles pour les plateformes Windows & MacOS :
-- Windows : [Télécharger](https://github.com/p-dor/LiveboxMonitor/releases/download/1.4/LiveboxMonitor.exe)
-- Windows avec console : [Télécharger](https://github.com/p-dor/LiveboxMonitor/releases/download/1.4/LiveboxMonitor_Console.exe)
-- MacOS (Intel) : [Télécharger](https://github.com/p-dor/LiveboxMonitor/releases/download/1.4/LiveboxMonitor.dmg)
-- MacOS (Intel) avec console : [Télécharger](https://github.com/p-dor/LiveboxMonitor/releases/download/1.4/LiveboxMonitor_Console.dmg)
-- MacOS (Silicon) : [Télécharger](https://github.com/p-dor/LiveboxMonitor/releases/download/1.4/LiveboxMonitor_Silicon.dmg)
-- MacOS (Silicon) avec console : [Télécharger](https://github.com/p-dor/LiveboxMonitor/releases/download/1.4/LiveboxMonitor_Silicon_Console.dmg)
+- Windows : [Télécharger](https://github.com/p-dor/LiveboxMonitor/releases/download/1.5/LiveboxMonitor.exe)
+- Windows avec console : [Télécharger](https://github.com/p-dor/LiveboxMonitor/releases/download/1.5/LiveboxMonitor_Console.exe)
+- MacOS (Intel) : [Télécharger](https://github.com/p-dor/LiveboxMonitor/releases/download/1.5/LiveboxMonitor.dmg)
+- MacOS (Intel) avec console : [Télécharger](https://github.com/p-dor/LiveboxMonitor/releases/download/1.5/LiveboxMonitor_Console.dmg)
+- MacOS (Silicon) : [Télécharger](https://github.com/p-dor/LiveboxMonitor/releases/download/1.5/LiveboxMonitor_Silicon.dmg)
+- MacOS (Silicon) avec console : [Télécharger](https://github.com/p-dor/LiveboxMonitor/releases/download/1.5/LiveboxMonitor_Silicon_Console.dmg)
 
-Nouveautés de la version 1.4 et historique des versions : [ici](https://github.com/p-dor/LiveboxMonitor/blob/main/docs/ReleaseHistory.md) ou [ici](https://github.com/p-dor/LiveboxMonitor/releases).
+Nouveautés de la version 1.5 et historique des versions : [ici](https://github.com/p-dor/LiveboxMonitor/blob/main/docs/ReleaseHistory.md) ou [ici](https://github.com/p-dor/LiveboxMonitor/releases).
 
 
 ### PyPI - [ici](https://pypi.org/project/LiveboxMonitor/)
@@ -289,7 +289,7 @@ L'onglet `Stats/Infos Livebox` propose les boutons suivants :
 - **`Infos Internet`** : affiche le type d'accès internet, les identifiants de connexion, les adresses IPs v4 & v6, la date et heure de la dernière connexion, la bande passante de la connexion, la MTU, etc
 - **`Infos Wifi`** : affiche les informations générales sur la connectivité Wifi, et l'état de chaque accès y compris pour les accès invités. Pour chaque accès on dispose d'informations détaillées telles que le canal, le standard, la bande passante, la qualité, la bande, le nombre d'appareils connectés, etc.
 - **`Infos LAN`** : affiche les informations générales sur la connectivité LAN. Il s'agit des informations DHCP de base et pour chaque interface Ethernet on peut identifier si elle est active ou non, la bande passante, etc.
-- **`Infos ONT`** : affiche les informations importantes concernant la connexion et le module Fibre (ONT), telles que la bande passante, la qualité du signal, le numéro de série et les versions logicielles, etc. Les champs `Puissance Signal Réception`, `Puissance Signal Transmission`, `Température`, `Voltage` et `BIAS` affichent des valeurs vertes si elles correspondent aux normes de qualité acceptables pour la connexion, en rouge si elles représentent un problème. Attention ce bouton n'est **pas disponible pour les Livebox 4**.
+- **`Infos ONT`** : affiche les informations importantes concernant la connexion et le module Fibre (ONT), telles que la bande passante, la qualité du signal, le numéro de série et les versions logicielles, etc. Les champs `Puissance Signal Réception`, `Puissance Signal Transmission`, `Température`, `Voltage` et `BIAS` affichent des valeurs vertes si elles correspondent aux normes de qualité acceptables pour la connexion, en rouge si elles représentent un problème, en orange si elles sont aux limites acceptables.
 ![Interface](http://p-dor.github.io/LiveboxMonitor/docs/png/Doc_LiveboxInfos_ONT.png)
 - **`Infos VoIP`** : affiche les informations générales concernant la téléphonie, telles que le protocole, le numéro de téléphone, la version logicielle de l'interface DECT, etc.
 - **`Infos IPTV`** : affiche les informations générales relatives aux services de télévision.
@@ -526,6 +526,7 @@ Un **double clic** sur un appel permet de facilement créer ou éditer le contac
 ### Boutons
 Les boutons suivants sont proposés pour gérer la liste des appels :
 - **`Rafraîchir`** : rafraîchit la liste des appels.
+- **`Spam`** : ouvre un site web ([numeroinconnu.fr](https://www.numeroinconnu.fr/)) sur votre navigateur permettant de vérifier l'origine de l'appel sélectionné.
 - **`Supprimer`** : supprime l'appel sélectionné.
 - **`Tout Supprimer...`** : supprime tous les appels.
 
@@ -571,6 +572,11 @@ Les actions concernant le **Wifi** :
 - **`État Global Wifi...`** : permet d'afficher l'état global du Wifi, en incluant l'état Wifi de tous les répéteurs Wifi Orange potentiellement connectés.
 
     ![Interface](http://p-dor.github.io/LiveboxMonitor/docs/png/Doc_Actions_WifiGlobalStatus.png)
+
+Les actions **Diverses** :
+- **`Sauvegarde et Restauration...`** : permet de régler la sauvegarde automatique de la configuration de la Livebox, de déclencher une sauvegarde ou de demander une restauration de la configuration.
+
+    ![Interface](http://p-dor.github.io/LiveboxMonitor/docs/png/Doc_Actions_BackupRestore.png)
 
 Les actions concernant les **Redémarrages** :
 - **`Redémarrer la Livebox...`** : permet de forcer un redémarrage de la Livebox.
@@ -630,7 +636,8 @@ Les actions concernant les **Réglages** :
     - `Séparateur CSV` : séparateur de liste (délimiteur) à utiliser lors de l'export de données dans des fichiers au format CSV.
     - `Statistiques temps réel des appareils wifi` : active ou non les statistiques en temps réel pour les appareils wifi. Celles ci s'affichent en bleu dans l'onglet `Appareils` et viennent recouvrir les statistiques standards qui s'affichent en noir toutes les 30 secondes.
     - `Empêcher la mise en veille` : permet d'empêcher votre ordinateur de se mettre en veille pendant l'exécution de ce programme. Utile pour laisser tourner l'application en permanence, par exemple pour l'export des statistiques ou pour la génération de notifications en temps réel.
-    - `Utiliser le style d'interface graphique natif` : par défaut le style "Fusion" est utilisé sur toutes les plateformes. Cette option permet sur les plateformes Windows et MacOS d'utiliser un style graphique plus natif. Cette option n'a aucun effet sur les plateformes Linux.  
+    - `Utiliser le style d'interface graphique natif` : par défaut le style "Fusion" est utilisé sur toutes les plateformes. Cette option permet sur les plateformes Windows et MacOS d'utiliser un style graphique plus natif. Cette option n'a aucun effet sur les plateformes Linux.
+    - `Sauver les mots de passe` : permet de sauver les mots de passe dans la configuration (encryptés) pour éviter d'avoir à les retaper à chaque lancement.  
 
 - **`Changer de profil...`** : affiche un dialogue permettant de changer le profil en cours et de relancer le programme.
 
